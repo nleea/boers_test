@@ -112,6 +112,10 @@ This will generate the following API endpoints:
 - `DELETE /user/{pk}/` → Delete a user
 
 
+# SWAGGER 
+
+# URL: http://0.0.0.0:8000/api/swagger/
+
 ## **Authentication API (AuthView)**  
 
 The `AuthView` class handles authentication-related actions, including login, password recovery, and password updates.  
@@ -443,3 +447,5 @@ en la carpeta docker del proyecto
 Crear el archivo .env en la raiz del proyecto para que se puedan utilizar las variables de entorno
 
 O si se va utilizar docker tambien se puede definir las variables en el docker-compose.yml, ya estan definidas algunas, estan comentadas
+
+

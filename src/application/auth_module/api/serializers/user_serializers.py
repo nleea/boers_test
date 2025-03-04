@@ -32,7 +32,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "username", "person","active"]
         extra_kwargs = {
-            'password': {'required': False}
+            'password': {'required': False},
+            'username': { 'required': False }
         }
 class ChangePasswordSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)

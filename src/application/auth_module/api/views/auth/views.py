@@ -9,7 +9,7 @@ from src.application.auth_module.api.validators.auth_validator import AuthValida
 from src.application.auth_module.api.repositories.factory_repository import (
     AuthModuleRepositoryFactory,
 )
-from src.application.auth_module.api.serializers.auth_serializer import SchemaResponseLogin, SchemaRequestForgetPassword, SchemaRequestChangePassword
+from src.application.auth_module.api.serializers.auth_serializer import SchemaResponseLogin, SchemaRequestForgetPassword, SchemaRequestChangePassword, SchemaRequestLogin
 from drf_spectacular.utils import extend_schema
 from src.application.auth_module.api.serializers.user_serializers import UserSerializer, ChangePasswordSerializer
 from src.interfaces.utils.email_utils import send_forget_password_mail
@@ -32,6 +32,7 @@ class AuthView(ViewSet):
     
     @extend_schema(
         responses={200: SchemaResponseLogin},
+        request=SchemaRequestLogin
     )
     @action(detail=False, methods=["POST"])
     def login(self, request):
