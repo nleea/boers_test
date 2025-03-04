@@ -42,7 +42,8 @@ class CustomMiddleware(MiddlewareMixin):
             "/favicon.ico",
             "/api/schema/",
             "/admin",
-            "/auth/forget_password/"
+            "/auth/forget_password/",
+            "/auth/change_password"
         ]
 
         match = re.search("|".join(routes_free), request.path)

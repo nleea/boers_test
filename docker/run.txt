@@ -1,6 +1,0 @@
-docker build -f docker/Dockerfile -t "nombre de la imagen"
-
-
-// este
-docker buildx build --platform linux/amd64,linux/arm64 -f docker/Dockerfile -t nelsonjavier/base_django:latest --push .
-para crear una imagen para las plataformas arm64

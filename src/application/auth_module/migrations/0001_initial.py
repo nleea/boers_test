@@ -4,7 +4,8 @@ import django.contrib.auth.models
 import django.db.models.deletion
 import django.utils.timezone
 from django.db import migrations, models
-
+from config.core.seeds.users import data
+from django.contrib.auth.hashers import make_password
 
 class Migration(migrations.Migration):
 
@@ -13,6 +14,39 @@ class Migration(migrations.Migration):
     dependencies = [
         ('auth', '0012_alter_user_first_name_max_length'),
     ]
+    
+    def insert_init_data(apps, schema_editor):
+        
+        Person = apps.get_model('auth_module', 'Person')
+        User = apps.get_model('auth_module', 'User')
+        
+        for i, user in enumerate(data):
+            
+            if i == 0:
+                User.objects.create(
+                    username=user['email'].split('@')[0],
+                    email=user['email'],
+                    password=make_password('123456'),
+                    is_superuser=True,
+                    is_staff=True
+                )
+                continue
+            
+            person = Person.objects.create(**user)
+            
+            User.objects.create(
+                username=user['email'].split('@')[0],
+                email=user['email'],
+                person=person,
+                password=make_password('123456')
+            )
+    
+    def undo_insert_data(apps, schema_editor):
+        Person = apps.get_model('auth_module', 'Person')
+        User = apps.get_model('auth_module', 'User')
+        
+        Person.objects.all().delete()
+        User.objects.all().delete()
 
     operations = [
         migrations.CreateModel(
@@ -72,6 +106,10 @@ class Migration(migrations.Migration):
             },
             managers=[
                 ('objects', django.contrib.auth.models.UserManager()),
-            ],
+            ],  
+        ),
+        
+        migrations.RunPython(
+            insert_init_data, reverse_code=undo_insert_data, atomic=True
         ),
     ]

@@ -17,6 +17,6 @@ class AuthValidator(serializers.Serializer):
         
         user = authenticate(**data)
         
-        if user and user.is_active:
+        if user and user.active:
             return user
         raise serializers.ValidationError("Incorrect Credentials Passed.")

@@ -12,7 +12,7 @@ class UserService(BaseService):
 
     def get_all(self):
         """Obtiene todos los usuarios serializados"""
-        users = self.repository.get_all()
+        users = self.repository.get_all().select_related("person")
         return self.serializer(users, many=True).data
 
     def get_by_id(self, pk):

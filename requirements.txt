@@ -28,12 +28,12 @@ packaging==24.1
 psycopg==3.2.1
 pycparser==2.22
 PyJWT==2.9.0
+PyMySQL==1.1.1
 pytz==2024.2
 PyYAML==6.0.2
 referencing==0.35.1
 requests==2.32.3
 rpds-py==0.20.0
-setuptools==75.2.0
 simplejson==3.19.3
 sqlparse==0.5.1
 typing_extensions==4.12.2

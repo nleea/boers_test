@@ -14,6 +14,12 @@ services:
       - "3306:3306"
     networks:
       - db_local
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
 
   adminer:
     image: adminer
@@ -21,9 +27,44 @@ services:
     networks:
       - db_local
     ports:
-      - 8080:8080
+      - "8080:8080"
+
+  django_app:
+    build: 
+      context: ..
+      dockerfile: docker/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        python manage.py migrate &&
+        gunicorn --bind :8000 --workers 3 config.server.wsgi:application
+
+    env_file:
+      - ../.env
+    # environment:
+    #   - SECRET_OR_KEY=''
+    #   - DATABASE=mysql
+    #   - DB_HOST=db
+    #   - DB_NAME=boers
+    #   - DB_PASSWORD=mysql
+    #   - DB_PORT=3306
+    #   - DB_USER=mysql
+    #   - ENV=dev
+    #   - EMAIL_HOST_USER=''
+    #   - EMAIL_HOST_PASSWORD=''
+    networks:
+      - db_local
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../:/app
+
 
 volumes:
   db_data:
+
 networks:
   db_local:

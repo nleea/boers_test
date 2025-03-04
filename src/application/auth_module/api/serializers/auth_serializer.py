@@ -13,3 +13,13 @@ class SchemaTokenLogin(serializers.Serializer):
 
 class SchemaResponseLogin(serializers.Serializer):
     token = SchemaTokenLogin(read_only=True, required=False,source= "s")
+
+
+class SchemaRequestForgetPassword(serializers.Serializer):
+    email = serializers.CharField()
+
+
+class SchemaRequestChangePassword(serializers.Serializer):
+    token = serializers.CharField()
+    new_password = serializers.CharField()
+    

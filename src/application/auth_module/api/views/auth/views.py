@@ -9,9 +9,9 @@ from src.application.auth_module.api.validators.auth_validator import AuthValida
 from src.application.auth_module.api.repositories.factory_repository import (
     AuthModuleRepositoryFactory,
 )
-from src.application.auth_module.api.serializers.auth_serializer import SchemaResponseLogin
+from src.application.auth_module.api.serializers.auth_serializer import SchemaResponseLogin, SchemaRequestForgetPassword, SchemaRequestChangePassword
 from drf_spectacular.utils import extend_schema
-from src.application.auth_module.api.serializers.user_serializers import UserSerializer, UserUpdateSerializer
+from src.application.auth_module.api.serializers.user_serializers import UserSerializer, ChangePasswordSerializer
 from src.interfaces.utils.email_utils import send_forget_password_mail
 from src.interfaces.utils.auth_utils import generate_token
 
@@ -20,6 +20,8 @@ class AuthView(ViewSet):
     factory = None
 
     def get_serializer_class(self):
+        if self.action == 'change_password':
+            return ChangePasswordSerializer
         return UserSerializer
     
     @property
@@ -41,7 +43,9 @@ class AuthView(ViewSet):
             return Response({ "token" :{ **token } }, status=status.HTTP_200_OK)
         return Response({"Invalid credentias"}, status=status.HTTP_401_UNAUTHORIZED)
 
-
+    @extend_schema(
+        request=SchemaRequestForgetPassword,
+    )
     @action(detail=False, methods=["POST"])
     def forget_password(self, request):
         email = request.data.get("email")
@@ -60,21 +64,22 @@ class AuthView(ViewSet):
         
         return Response({"message": "Email sent"}, status=status.HTTP_200_OK)
     
-    
+    @extend_schema(
+        request=SchemaRequestChangePassword,
+    )
     @action(detail=False, methods=["POST"])
-    def forget_password(self, request):
-        new_password = request.data.get("email")
+    def change_password(self, request):
+        new_password = request.data.get("new_password")
         token = request.data.get("token")
         
         if not new_password or not token:
             return Response({"message": "there is a error, check the data"}, status=status.HTTP_400_BAD_REQUEST)
         
         instance = self.get_service.get_by_token(token)
-        
-        serializer = UserUpdateSerializer(instance, data={"password": new_password})
+        serializer = self.get_serializer_class()(instance, data={"password": new_password})
         
         if serializer.is_valid():
             self.get_service.update(instance.id, serializer.validated_data)
             return Response({"message": "Password updated"}, status=status.HTTP_200_OK)
-        return Response({"message": "there is a error, check the data"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         
