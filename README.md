@@ -5,7 +5,7 @@ Backend Development: Implementation of a data-driven application using Django.
 
 # Estructura del proyecto
 
-boers
+```boers
 |
 ├── config
 |    ├── app -> Configuration files (base, dev, prod)
@@ -20,16 +20,16 @@ boers
 |    ├── application -> Business logic of the application
 |    ├── domain -> External entities (e.g., error handling)
 |    ├── infrastructure -> Core services
-|    ├── interfaces -> Helpers and utilities
+|    ├── interfaces -> Helpers and utilities```
 
 
 ## Application 
 
-├── auth_module
+```├── auth_module
 |    ├── api -> Views, validators, serializers, services, and URLs
 |    ├── migrations -> Database migration files
 |    ├── models -> Database models
-|    ├── repositories -> Service implementations for communication between the user and the application
+|    ├── repositories -> Service implementations for communication between the user and the application```
 
 
 ## **UserViewSet API**
