@@ -21,6 +21,10 @@ DATABASE_CONFIG = {
             "PASSWORD": DB_DEVELOP_PASSWORD,
             "HOST": DB_DEVELOP_HOST,
             "PORT": DB_DEVELOP_PORT,
+            "TEST": {
+                "NAME": f"test_{DB_DEVELOP_NAME}",
+                "MIRROR": "default"
+            }
         },
     },
     'prod': {

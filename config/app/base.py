@@ -17,8 +17,7 @@ import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"), overwrite=True)
-
+environ.Env.read_env(os.path.join(BASE_DIR.parent, ".env"), overwrite=True)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_OR_KEY")
 
